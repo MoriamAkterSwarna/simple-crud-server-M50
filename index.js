@@ -36,6 +36,12 @@ async function run() {
     const usersDB = client.db("usersDB");
     const usersCollection = usersDB.collection("users");
 
+    
+    app.get("/users", async (req, res) => {
+      const cursor = usersCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
     app.post('/users', async (req, res) => {
       const newUser = req.body;
@@ -45,6 +51,8 @@ async function run() {
       res.status(201).json(result);
       console.log("User added:", result);
     });
+
+
 
 
      // Send a ping to confirm a successful connection
