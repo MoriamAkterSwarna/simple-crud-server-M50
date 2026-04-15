@@ -3,7 +3,7 @@ dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 const express = require('express')
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express()
 const port = process.env.PORT || 7000
 
@@ -45,14 +45,20 @@ async function run() {
 
     app.post('/users', async (req, res) => {
       const newUser = req.body;
-      console.log("req.body", newUser)
+   
 
       const result= await usersCollection.insertOne(newUser);
       res.status(201).json(result);
-      console.log("User added:", result);
+      
     });
 
 
+    app.delete("/user/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await usersCollection.deleteOne(query);
+        res.send(result);
+        });
 
 
      // Send a ping to confirm a successful connection
